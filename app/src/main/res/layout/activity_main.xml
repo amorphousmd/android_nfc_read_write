@@ -8,7 +8,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Simple NFC Reader"
+        android:text="@string/title"
         android:textSize="24sp"
         android:textStyle="bold"
         android:gravity="center"
@@ -18,7 +18,7 @@
         android:id="@+id/write_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Write 1,2,3,4 to Page 5"
+        android:text="@string/write_button_txt"
         android:layout_marginBottom="16dp" />
 
     <EditText
@@ -31,6 +31,8 @@
         android:fontFamily="monospace"
         android:background="@android:drawable/edit_text"
         android:padding="12dp"
-        android:inputType="textMultiLine" />
+        android:inputType="textMultiLine"
+        android:hint="@string/main_box_hint"
+        android:importantForAutofill="no" />
 
 </LinearLayout>

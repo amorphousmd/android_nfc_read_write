@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">My Application</string>
+    <string name="title">NFC Read/Write</string>
+    <string name="write_button_txt">Write to Card</string>
+    <string name="main_box_hint">Place NFC tag near device to read data…</string>
 </resources>

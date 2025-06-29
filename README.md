@@ -1,4 +1,4 @@
-# Simple Android to Read and Write Pages to NFC Card
+# Simple Android App to Read and Write Pages to NFC Card
 
 Card used NTAG215
 

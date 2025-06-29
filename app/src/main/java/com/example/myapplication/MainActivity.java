@@ -33,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
 
         // Initialize the text box
         nfcDataText = findViewById(R.id.nfc_data_text);
-        nfcDataText.setHint("Place NFC tag near device to read data...");
 
         // Initialize the write button
         writeButton = findViewById(R.id.write_button);
@@ -197,7 +196,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             byte[] payload = record.getPayload();
             String textEncoding = ((payload[0] & 128) == 0) ? "UTF-8" : "UTF-16";
-            int languageCodeLength = payload[0] & 0063;
+            int languageCodeLength = payload[0] & 63;
             return new String(payload, languageCodeLength + 1,
                     payload.length - languageCodeLength - 1, textEncoding);
         } catch (Exception e) {
