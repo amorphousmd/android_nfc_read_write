@@ -7,32 +7,53 @@
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/title"
-        android:textSize="24sp"
-        android:textStyle="bold"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginBottom="16dp"
         android:gravity="center"
-        android:layout_marginBottom="16dp" />
-
-    <Button
-        android:id="@+id/write_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/write_button_txt"
-        android:layout_marginBottom="16dp" />
+        android:text="@string/nfc_read_text"
+        android:textSize="24sp"
+        android:textStyle="bold" />
 
     <EditText
         android:id="@+id/nfc_data_text"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="top|start"
-        android:scrollbars="vertical"
-        android:textSize="14sp"
-        android:fontFamily="monospace"
+        android:layout_height="0dp"
+        android:layout_weight="6"
         android:background="@android:drawable/edit_text"
-        android:padding="12dp"
-        android:inputType="textMultiLine"
+        android:fontFamily="monospace"
+        android:gravity="start|top"
         android:hint="@string/main_box_hint"
-        android:importantForAutofill="no" />
+        android:importantForAutofill="no"
+        android:inputType="textMultiLine"
+        android:padding="12dp"
+        android:scrollbars="vertical"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="16dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="@string/nfc_write_text"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/write_button"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:text="@string/write_button_txt"
+        android:layout_marginBottom="16dp" />
+
+    <Spinner
+        android:id="@+id/write_page_options"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:entries="@array/write_pages"/>
 
 </LinearLayout>

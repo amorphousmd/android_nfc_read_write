@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.widget.EditText;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -24,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     private String[][] techLists;
     private EditText nfcDataText;
     private Button writeButton;
+    private Spinner writePageSpinner;
     private Tag currentTag;
 
     @Override
@@ -38,6 +40,9 @@ public class MainActivity extends AppCompatActivity {
         writeButton = findViewById(R.id.write_button);
         writeButton.setEnabled(false);
         writeButton.setOnClickListener(v -> writeToTag());
+
+        // Initialize write spinner
+        writePageSpinner = findViewById(R.id.write_page_options);
 
         // Initialize NFC adapter
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
@@ -227,9 +232,12 @@ public class MainActivity extends AppCompatActivity {
         try {
             ultralight.connect();
 
-            // Write bytes 1, 2, 3, 4 to page 5
+            // Write bytes 1, 2, 3, 4 to selected page
+            String selectPage = writePageSpinner.getSelectedItem().toString();
+            String selectedPageIndex = selectPage.replace("Page", "").strip();
+            int pageIndex = Integer.parseInt(selectedPageIndex);
             byte[] dataToWrite = {0x01, 0x02, 0x03, 0x04};
-            ultralight.writePage(5, dataToWrite);
+            ultralight.writePage(pageIndex, dataToWrite);
 
             ultralight.close();
 
