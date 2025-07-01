@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private IntentFilter[] intentFilters;
     private String[][] techLists;
     private EditText nfcDataText;
+    private EditText nfcWriteText;
     private Button writeButton;
     private Spinner writePageSpinner;
     private Tag currentTag;
@@ -48,6 +49,9 @@ public class MainActivity extends AppCompatActivity {
         // Initialize the text box
         nfcDataText = findViewById(R.id.nfc_read_text);
 
+        // Initialize the write box
+        nfcWriteText = findViewById(R.id.nfc_write_text);
+
         // Initialize the write button
         writeButton = findViewById(R.id.write_button);
         writeButton.setEnabled(false);
@@ -61,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (nfcAdapter == null) {
             Toast.makeText(this, "NFC is not supported on this device", Toast.LENGTH_LONG).show();
-//            finish();
+            finish();
             return;
         }
 
@@ -95,24 +99,6 @@ public class MainActivity extends AppCompatActivity {
                 new String[] { Ndef.class.getName() },
                 new String[] { MifareUltralight.class.getName() }
         };
-    }
-
-    private void updateSpinner(int maxPage) {
-        // Create array of page options
-        String[] pageOptions = new String[maxPage - 3]; // Pages 4 to N
-        for (int i = 0; i < pageOptions.length; i++) {
-            pageOptions[i] = "Page " + (i + 4); // Start from Page 4
-        }
-
-        // Create adapter and set it to spinner
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                this,
-                android.R.layout.simple_spinner_item,
-                pageOptions
-        );
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        writePageSpinner.setAdapter(adapter);
     }
 
     @Override
@@ -265,7 +251,7 @@ public class MainActivity extends AppCompatActivity {
             String selectPage = writePageSpinner.getSelectedItem().toString();
             String selectedPageIndex = selectPage.replace("Page", "").strip();
             int pageIndex = Integer.parseInt(selectedPageIndex);
-            byte[] dataToWrite = {0x01, 0x02, 0x03, 0x04};
+            byte[] dataToWrite = prepareWriteData(nfcWriteText.getText().toString());
             ultralight.writePage(pageIndex, dataToWrite);
 
             ultralight.close();
@@ -319,6 +305,46 @@ public class MainActivity extends AppCompatActivity {
         } else {
             data.append("\nThis tag does not support MifareUltralight technology\n");
         }
+    }
+
+    private void updateSpinner(int maxPage) {
+        // Create array of page options
+        String[] pageOptions = new String[maxPage - 3]; // Pages 4 to N
+        for (int i = 0; i < pageOptions.length; i++) {
+            pageOptions[i] = "Page " + (i + 4); // Start from Page 4
+        }
+
+        // Create adapter and set it to spinner
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_spinner_item,
+                pageOptions
+        );
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        writePageSpinner.setAdapter(adapter);
+    }
+
+    private byte[] prepareWriteData(String input) {
+        byte[] result = new byte[4]; // Always 4 bytes, initialized to 0x00
+
+        if (input == null || input.isEmpty()) {
+            // If empty, all bytes are 0x00 (already default for new byte array)
+            return result;
+        }
+
+        // Convert string to ASCII bytes
+        int copyLength = Math.min(input.length(), 4);
+        for (int i = 0; i < copyLength; i++) {
+            char c = input.charAt(i);
+            if (c <= 127) { // Valid ASCII range
+                result[i] = (byte) c;
+            } else {
+                result[i] = 0x3F; // '?' for non-ASCII characters
+            }
+        }
+
+        return result;
     }
 
     private String bytesToAscii(byte[] bytes) {
