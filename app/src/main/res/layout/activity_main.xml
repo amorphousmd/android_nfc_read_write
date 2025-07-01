@@ -16,7 +16,7 @@
         android:textStyle="bold" />
 
     <EditText
-        android:id="@+id/nfc_data_text"
+        android:id="@+id/nfc_read_text"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="6"
@@ -41,13 +41,20 @@
         android:textSize="24sp"
         android:textStyle="bold" />
 
-    <Button
-        android:id="@+id/write_button"
+    <EditText
+        android:id="@+id/nfc_write_text"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:text="@string/write_button_txt"
-        android:layout_marginBottom="16dp" />
+        android:background="@android:drawable/edit_text"
+        android:fontFamily="monospace"
+        android:gravity="start|top"
+        android:hint="@string/nfc_write_box_hint"
+        android:importantForAutofill="no"
+        android:inputType="textMultiLine"
+        android:padding="12dp"
+        android:scrollbars="vertical"
+        android:textSize="14sp" />
 
     <Spinner
         android:id="@+id/write_page_options"
@@ -55,5 +62,13 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:entries="@array/write_pages"/>
+
+    <Button
+        android:id="@+id/write_button"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:text="@string/write_button_txt"
+        android:layout_marginBottom="16dp" />
 
 </LinearLayout>

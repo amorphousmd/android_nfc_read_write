@@ -18,6 +18,8 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import android.widget.ArrayAdapter;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -44,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // Initialize the text box
-        nfcDataText = findViewById(R.id.nfc_data_text);
+        nfcDataText = findViewById(R.id.nfc_read_text);
 
         // Initialize the write button
         writeButton = findViewById(R.id.write_button);
@@ -59,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (nfcAdapter == null) {
             Toast.makeText(this, "NFC is not supported on this device", Toast.LENGTH_LONG).show();
-            finish();
+//            finish();
             return;
         }
 
@@ -93,6 +95,24 @@ public class MainActivity extends AppCompatActivity {
                 new String[] { Ndef.class.getName() },
                 new String[] { MifareUltralight.class.getName() }
         };
+    }
+
+    private void updateSpinner(int maxPage) {
+        // Create array of page options
+        String[] pageOptions = new String[maxPage - 3]; // Pages 4 to N
+        for (int i = 0; i < pageOptions.length; i++) {
+            pageOptions[i] = "Page " + (i + 4); // Start from Page 4
+        }
+
+        // Create adapter and set it to spinner
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_spinner_item,
+                pageOptions
+        );
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        writePageSpinner.setAdapter(adapter);
     }
 
     @Override
@@ -250,7 +270,7 @@ public class MainActivity extends AppCompatActivity {
 
             ultralight.close();
 
-            Toast.makeText(this, "Successfully wrote 1,2,3,4 to page 5!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Successfully wrote 1,2,3,4 to page " + pageIndex, Toast.LENGTH_SHORT).show();
 
             // Re-read the tag to show updated data
             if (currentTag != null) {
@@ -287,7 +307,8 @@ public class MainActivity extends AppCompatActivity {
                         }
                         data.append("\n");
                     } catch (Exception e) {
-                        Toast.makeText(this, "Read "+ page + "pages", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Read "+ page + " pages", Toast.LENGTH_SHORT).show();
+                        updateSpinner(page);
                         break;
                     }
                 }
