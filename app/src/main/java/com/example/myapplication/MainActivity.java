@@ -11,6 +11,8 @@ import android.nfc.tech.Ndef;
 import android.nfc.tech.MifareUltralight;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.Button;
 import android.widget.Spinner;
@@ -31,6 +33,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // No one like the title bar.
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                                  WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
+
         setContentView(R.layout.activity_main);
 
         // Initialize the text box
@@ -180,7 +190,6 @@ public class MainActivity extends AppCompatActivity {
             data.append("- ").append(tech.substring(tech.lastIndexOf('.') + 1)).append("\n");
         }
 
-        // Read memory pages 4-13 if MifareUltralight is supported
         readMifareUltralightPages(tag, data);
 
         // Update the text box with the read data
@@ -260,8 +269,8 @@ public class MainActivity extends AppCompatActivity {
                 ultralight.connect();
                 data.append("\nMifare Ultralight Memory Pages (4-13):\n");
 
-                // Read pages 4-13 (10 pages total)
-                for (int page = 4; page < 14; page++) {
+                // Read 200 pages. Arbitrary large number, I happen to know NTAG215 have 136 pages.
+                for (int page = 0; page < 200; page++) {
                     try {
                         byte[] pageData = ultralight.readPages(page);
                         // readPages returns 4 pages (16 bytes), but we only want the first page (4 bytes)
@@ -278,7 +287,8 @@ public class MainActivity extends AppCompatActivity {
                         }
                         data.append("\n");
                     } catch (Exception e) {
-                        data.append("Page ").append(page).append(": Error reading - ").append(e.getMessage()).append("\n");
+                        Toast.makeText(this, "Read "+ page + "pages", Toast.LENGTH_SHORT).show();
+                        break;
                     }
                 }
                 ultralight.close();
